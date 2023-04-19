@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Humanizer;
 using Silk.NET.BuildTools.Common;
@@ -51,28 +52,29 @@ public static class EnumPostProcessor
                 continue;
             }
 
-            var testName = @enum.NativeName;
-            if (!testName.Contains('_'))
+            foreach (var tok in @enum.Tokens)
             {
-                testName = testName.Underscore();
+                tok.TrimmingName = tok.NativeName.LenientUnderscore();
             }
+
+            var testName = @enum.NativeName.LenientUnderscore();
             
             var prefix = @enum.Tokens.Count == 1
                 ? Utilities.FindCommonPrefix
-                    (new List<string> { @enum.Tokens[0].NativeName, testName }, true, false)
-                : Utilities.FindCommonPrefix(@enum.Tokens.Select(x => x.NativeName).ToList(), false, false);
+                    (new List<string> { @enum.Tokens[0].TrimmingName, testName }, true, false)
+                : Utilities.FindCommonPrefix(@enum.Tokens.Select(x => x.TrimmingName).ToList(), false, false);
 
-            if (@enum.Tokens.Any(x => x.NativeName.Length <= prefix.Length))
+            if (@enum.Tokens.Any(x => x.TrimmingName.Length <= prefix.Length))
             {
                 // Second pass, put the enum name in the loop to see if it makes a difference
                 prefix = Utilities.FindCommonPrefix
                 (
-                    @enum.Tokens.Select(x => x.NativeName).Concat(Enumerable.Repeat(testName, 1)).ToList(),
+                    @enum.Tokens.Select(x => x.TrimmingName).Concat(Enumerable.Repeat(testName, 1)).ToList(),
                     false, false
                 );
             }
 
-            if (@enum.Tokens.Any(x => x.NativeName.Length <= prefix.Length))
+            if (@enum.Tokens.Any(x => x.TrimmingName.Length <= prefix.Length))
             {
                 // Skip
                 continue;
@@ -98,8 +100,9 @@ public static class EnumPostProcessor
                 (
                     x =>
                     {
-                        var newName = Naming.Translate(x.NativeName[prefix.Length..], task.FunctionPrefix);
-                        if (newName == x.Name)
+                        var newName = Naming.Translate(x.TrimmingName[prefix.Length..], task.FunctionPrefix);
+                        //This check is to prevent the generation of duplicate enum values, caused when the old obsolete enum name is the same as the new enum name.
+                        if (newName == x.Name && !task.Controls.Contains("no-obsolete-enum"))
                         {
                             return null;
                         }

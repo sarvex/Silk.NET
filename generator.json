@@ -2373,8 +2373,8 @@
             "extensionsNamespace": "Silk.NET.WebGPU.Extensions",
             "nameContainer": {
                 "linux-x64": "libwgpu_native.so",
-                "win-x64": "libwgpu_native.dll",
-                "win-x86": "libwgpu_native.dll",
+                "win-x64": "wgpu_native.dll",
+                "win-x86": "wgpu_native.dll",
                 "osx-x64": "libwgpu_native.dylib",
                 "android": "libwgpu_native.so",
                 "className": "WebGPULibraryNameContainer"
@@ -2386,6 +2386,172 @@
                     "WGPUMapModeFlags": "Silk.NET.WebGPU.MapMode",
                     "WGPUShaderStageFlags": "Silk.NET.WebGPU.ShaderStage",
                     "WGPUTextureUsageFlags": "Silk.NET.WebGPU.TextureUsage"
+                },
+                {
+                    "$include.commonTypeMap": "build/csharp_typemap.json",
+                    "$include.dxTypeMap": "build/dx_typemap.json"
+                }
+            ]
+        },
+        {
+            "profileName": "SPIRV",
+            "sources": [
+                "build/submodules/SPIRV-Headers/include/spirv/unified1/spirv.h"
+            ],
+            "mode": "Clang",
+            "cacheDir": "build/cache",
+            "cacheKey": "spirv",
+            "controlDescriptors": [
+                "convert-windows-only",
+                "no-obsolete-enum",
+                "typemap-native",
+                "no-extra-dir",
+                "no-name-container"
+            ],
+            "converter": {},
+            "prefix": "spv",
+            "clang": {
+                "args": [
+                    "--language=c++",
+                    "--std=c++17",
+                    "-m64",
+                    "-Wno-expansion-to-defined",
+                    "-Wno-ignored-attributes",
+                    "-Wno-ignored-pragma-intrinsic",
+                    "-Wno-nonportable-include-path",
+                    "-Wno-pragma-pack",
+                    "-I$windowsSdkIncludes",
+                    "-Ibuild/submodules/SPIRV-Reflect"
+                ],
+                "traverse": [
+                    "build/submodules/SPIRV-Headers/include/spirv/unified1/spirv.h"
+                ],
+                "classes": {
+                    "spirv.h": "[Core]SPIRV"
+                }
+            },
+            "exclude": [
+                "SPV_VERSION",
+                "SPV_REVISION"
+            ],
+            "rename": {
+            },
+            "bakery": {
+                "profileNames": [
+                    "spirv"
+                ]
+            },
+            "output": {
+                "mode": "Default",
+                "path": "src/SPIRV/Silk.NET.SPIRV",
+                "licenseFile": "build/LICENSE_HEADER.txt",
+                "props": "build/props/bindings.props"
+            },
+            "namespace": "Silk.NET.SPIRV",
+            "extensionsNamespace": "Silk.NET.SPIRV.Extensions",
+            "nameContainer": {
+                "linux-x64": "libspirv-reflect.so",
+                "win-x64": "spirv-reflect.dll",
+                "win-x86": "spirv-reflect.dll",
+                "osx-x64": "libspirv-reflect.dylib",
+                "android": "libspirv-reflect.so",
+                "className": "SPIRVReflectLibraryNameContainer"
+            },
+            "typeMaps": [
+                {
+                    "SpvReflectTypeDescription::Traits": "Traits",
+                    "SpvReflectShaderModule::Internal": "Internal",
+                    "SpvReflectNumericTraits::Scalar": "Scalar",
+                    "SpvReflectNumericTraits::Vector": "Vector",
+                    "SpvReflectNumericTraits::Matrix": "Matrix",
+                    "SpvReflectEntryPoint::LocalSize": "LocalSize"
+                },
+                {
+                    "$include.commonTypeMap": "build/csharp_typemap.json",
+                    "$include.dxTypeMap": "build/dx_typemap.json"
+                }
+            ]
+        },
+        {
+            "profileName": "SPIRVReflect",
+            "sources": [
+                "build/submodules/SPIRV-Reflect/spirv_reflect.h"
+            ],
+            "mode": "Clang",
+            "cacheDir": "build/cache",
+            "cacheKey": "spirv-reflect",
+            "controlDescriptors": [
+                "convert-windows-only",
+                "no-obsolete-enum",
+                "typemap-native",
+                "no-extra-dir"
+            ],
+            "converter": {},
+            "prefix": "spv",
+            "clang": {
+                "args": [
+                    "--language=c++",
+                    "--std=c++17",
+                    "-m64",
+                    "-Wno-expansion-to-defined",
+                    "-Wno-ignored-attributes",
+                    "-Wno-ignored-pragma-intrinsic",
+                    "-Wno-nonportable-include-path",
+                    "-Wno-pragma-pack",
+                    "-I$windowsSdkIncludes",
+                    "-Ibuild/submodules/SPIRV-Reflect"
+                ],
+                "traverse": [
+                    "build/submodules/SPIRV-Reflect/spirv_reflect.h"
+                ],
+                "classes": {
+                    "spirv_reflect.h": "[Core]SPIRVReflect"
+                }
+            },
+            "exclude": [
+                "SPV_REVISION",
+                "SPV_VERSION"
+            ],
+            "rename": {
+            },
+            "bakery": {
+                "profileNames": [
+                    "spirv_reflect"
+                ]
+            },
+            "output": {
+                "mode": "Default",
+                "path": "src/SPIRV/Silk.NET.SPIRVReflect",
+                "licenseFile": "build/LICENSE_HEADER.txt",
+                "props": "build/props/bindings.props"
+            },
+            "namespace": "Silk.NET.SPIRVReflect",
+            "extensionsNamespace": "Silk.NET.SPIRVReflect.Extensions",
+            "nameContainer": {
+                "linux-x64": "libspirv-reflect.so",
+                "win-x64": "spirv-reflect.dll",
+                "win-x86": "spirv-reflect.dll",
+                "osx-x64": "libspirv-reflect.dylib",
+                "android": "libspirv-reflect.so",
+                "className": "SPIRVReflectLibraryNameContainer"
+            },
+            "typeMaps": [
+                {
+                    "SpvReflectTypeDescription::Traits": "Traits",
+                    "SpvReflectShaderModule::Internal": "Internal",
+                    "SpvReflectNumericTraits::Scalar": "Scalar",
+                    "SpvReflectNumericTraits::Vector": "Vector",
+                    "SpvReflectNumericTraits::Matrix": "Matrix",
+                    "SpvReflectEntryPoint::LocalSize": "LocalSize",
+                    "SpvSourceLanguage_": "Silk.NET.SPIRV.SourceLanguage",
+                    "SpvDim_": "Silk.NET.SPIRV.Dim",
+                    "SpvExecutionMode_": "Silk.NET.SPIRV.ExecutionMode",
+                    "SpvExecutionModel_": "Silk.NET.SPIRV.ExecutionModel",
+                    "SpvImageFormat_": "Silk.NET.SPIRV.ImageFormat",
+                    "SpvOp_": "Silk.NET.SPIRV.Op",
+                    "SpvBuiltIn_": "Silk.NET.SPIRV.BuiltIn",
+                    "SpvStorageClass_": "Silk.NET.SPIRV.StorageClass",
+                    "SpvCapability_": "Silk.NET.SPIRV.Capability"
                 },
                 {
                     "$include.commonTypeMap": "build/csharp_typemap.json",
